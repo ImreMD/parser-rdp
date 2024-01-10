@@ -23,7 +23,7 @@ fn node_builder(material: String)-> (Vec<Char>, Precedence) {
     //TODO: implement a node builder 
     // node_builder will receive a Vec<Char> i.e. ["3","+"]
     // and will produce a Node (left or right)
-    // node_builder will have identifier to enable the collection
+    // node_builder will have an identifier to enable the collection
     // of their respective work by the engineer
 }
 #[derive(Debug)]
