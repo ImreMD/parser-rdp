@@ -48,9 +48,9 @@ type MaterialMap = HashMap<Material, String>;
 
 fn node_builder(material: HashMap<Material, String>, instruction: Build_Instruction)-> (Node, Precedence) {
 
-    //TODO: implement a node builder return type (Vec<char>, Precedence)
-    // node_builder will receive a Vec<Char> i.e. ["3","+"]
-    // and will produce a Node (left or right)
+    //TODO: implement a node builder return type (Node, Precedence)
+    // node_builder will receive a HasMap<Material, String> i.e. [numeric:"3",operation:"+"]
+    // and will produce a Node (left or right) with a precedence rule
     // node_builder will have an identifier to enable the collection
     // of their respective work by the engineer
     let op = material.get(&Material::operation).unwrap();
