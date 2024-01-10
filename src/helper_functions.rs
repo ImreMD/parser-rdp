@@ -59,6 +59,7 @@ fn test_clear_white_space() {
 }
 
 
+
 #[test]
 fn test_simple_lexer() {
 
