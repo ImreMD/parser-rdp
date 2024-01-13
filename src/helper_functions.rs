@@ -38,7 +38,9 @@ fn split_vector_by_slicing(vector: Vec<i32>, mut collect: &mut Vec<Vec<i32>>) ->
         
     }
     
-    
+pub fn take_all_but_last_two_take<T: std::clone::Clone>(vec: &Vec<T>) -> Vec<T> {
+        vec[..vec.len() - 1].to_vec()
+    }
 
 
 
