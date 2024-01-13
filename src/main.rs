@@ -83,3 +83,16 @@ let node = Node {operation: "+".to_string(),left: left_node, right: right_node }
 println!("node {:?}", node)
 
 }
+
+#[test]
+//testing the node_builder
+fn test_node_builder () {
+    
+    let mut test_materials =  HashMap::new();
+    test_materials.insert(Material::operation, "plus".to_string());
+    test_materials.insert(Material::numeric, "3".to_string());
+   
+
+    let test_node = node_builder(test_materials, Build_Instruction::build_right);
+    println!("{:?}", test_node.0)
+}
