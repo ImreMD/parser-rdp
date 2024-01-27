@@ -39,13 +39,15 @@ enum Material {
 
 type MaterialMap = HashMap<Material, String>;
 
-fn enginneer(lexer_string: &Vec<String>) -> () {
+fn enginneer(lexer_string: &Vec<&str>) -> () {
 
+    let mut vec_operations:Vec<&str> = vec!["x","/","+","-"];
+    vec_operations.sort();
+    let vec_operations = vec_operations;
 
-
-    let mut parsed_materials_first_node: HashMap<Material, String> = HashMap::new();
+    let mut parsed_materials_first_node: HashMap<Material, &str> = HashMap::new();
     
-    let str_last:String = lexer_string[lexer_string.len()-1].clone();
+    let str_last = &lexer_string[lexer_string.len()-1];
    
     let mut opr_first_node:Material;
 
@@ -53,23 +55,24 @@ fn enginneer(lexer_string: &Vec<String>) -> () {
    println!("LENGTH ---- : {}",lexer_string.len());
     // *****************************************************
    
-    if str_last == "2" || str_last == "18" {
-        println!("CHECK 2 CLAUSE");  // testing code execution
-         // *****************************************************
-            let opr_first_node:Material = Material::numeric;
-            parsed_materials_first_node.insert(opr_first_node, str_last);
-            leaf_builder(&parsed_materials_first_node);
- 
-        }
    
-    else if str_last == "x" {
+    if let Ok(contents) = vec_operations.binary_search(str_last) {
         println!("CHECK X CLAUSE");  // testing code execution
          // *****************************************************
             let opr_first_node:Material = Material::variable;
             parsed_materials_first_node.insert(opr_first_node, str_last);
             leaf_builder(&parsed_materials_first_node);
 
-        } 
+        } else {
+
+            println!("CHECK 2 CLAUSE");  // testing code execution
+         // *****************************************************
+            let opr_first_node:Material = Material::numeric;
+            parsed_materials_first_node.insert(opr_first_node, str_last);
+            leaf_builder(&parsed_materials_first_node);
+ 
+        };
+        
    
     if lexer_string.len() > 1 {
     enginneer(&helper_functions::take_all_but_last_two_take(&lexer_string));
@@ -80,9 +83,10 @@ fn enginneer(lexer_string: &Vec<String>) -> () {
 
 
 
-fn leaf_builder(material: &HashMap<Material, String>)-> Leaf {
+fn leaf_builder(material: &HashMap<Material, &str>)-> Leaf {
     
     //VERY PRIMITIVE APPROACH!
+    //segregate only operations ("x","/","+","-") for the parsed stream
     println!("ENTER lEAFBUILDER"); // testing code execution
     
     // *****************************************************
@@ -137,7 +141,7 @@ println!("node {:?}", node)
 //testing the node_builder
 fn test_leaf_builder () {
     
-    let mut test_string =  vec!["18".to_string(),"x".to_string(),"2".to_string()];
+    let mut test_string =  vec!["4","/","18","x","2"];
     println!("START TEST vec LENGTH:------ {} --------", test_string.len());
     //test_materials.insert(Material::operation, "plus".to_string());
     enginneer(&test_string);
