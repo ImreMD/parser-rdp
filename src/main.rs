@@ -1,43 +1,12 @@
 #![warn(unused_variables)]
 #![warn(non_snake_case)]
 mod helper_functions;
+use crate::helper_functions::*;
+mod structures;
+use crate::structures::all_structures::*;
 
 use std::collections::HashMap;
 
-#[derive(Debug)]
-enum Leaf {
-    Variable(String),
-    Numeric(String),
-    NoLeaf
-
-}
-
-#[derive(Debug)]
-struct Node {
-    operation : String,
-    left : Box<Option<Leaf>>,
-    right : Box<Option<Leaf>>
-}
-
-type Precedence = i32;
-
-enum Build_Instruction {
-
-    build_left,
-    build_right
-
-}
-#[derive(PartialEq, Eq, Hash)]
-#[derive(Debug)]
-enum Material {
-
-    operation,
-    numeric,
-    variable
-
-}
-
-type MaterialMap = HashMap<Material, String>;
 
 fn enginneer(lexer_string: &Vec<&str>) -> () {
 
@@ -45,65 +14,63 @@ fn enginneer(lexer_string: &Vec<&str>) -> () {
     vec_operations.sort();
     let vec_operations = vec_operations;
 
-    let mut parsed_materials_first_node: HashMap<Material, &str> = HashMap::new();
-    
-    let str_last = &lexer_string[lexer_string.len()-1];
-   
-    let mut opr_first_node:Material;
 
-   println!("ENGINEER STARTS");// testing code execution
-   println!("LENGTH ---- : {}",lexer_string.len());
-    // *****************************************************
-   
-   
-    if let Ok(contents) = vec_operations.binary_search(str_last) {
-        println!("CHECK X CLAUSE");  // testing code execution
+    if lexer_string.len() > 2 {
+        println!("ENGINEER STARTS");// testing code execution
+        println!("LENGTH ---- : {}",lexer_string.len());
          // *****************************************************
-            let opr_first_node:Material = Material::variable;
-            parsed_materials_first_node.insert(opr_first_node, str_last);
-            leaf_builder(&parsed_materials_first_node);
-
+         // send two last token to node_leaf_builder
+         // helper function : create HashMap <material, &Str>
+         let hm = create_hashmap_to_builder(&lexer_string[lexer_string.len() - 2 ..]);
+         node_leaf_builder(&hm);
+        
+        enginneer(&helper_functions::take_all_but_last(&lexer_string));
         } else {
 
-            println!("CHECK 2 CLAUSE");  // testing code execution
-         // *****************************************************
-            let opr_first_node:Material = Material::numeric;
-            parsed_materials_first_node.insert(opr_first_node, str_last);
-            leaf_builder(&parsed_materials_first_node);
- 
-        };
-        
-   
-    if lexer_string.len() > 1 {
-    enginneer(&helper_functions::take_all_but_last_two_take(&lexer_string));
-    }
+        println!("ENGINEER EXITS");// testing code execution
+
+        }
+  
+    
     
 
 }
 
 
 
-fn leaf_builder(material: &HashMap<Material, &str>)-> Leaf {
+fn node_leaf_builder(material: &HashMap<Material, &str>)-> () { //leaf<'a>
     
     //VERY PRIMITIVE APPROACH!
     //segregate only operations ("x","/","+","-") for the parsed stream
-    println!("ENTER lEAFBUILDER"); // testing code execution
+    println!("*************************************************");
     
-    // *****************************************************
+    println!("ENTER lEAFBUILDER"); // testing code execution
     println!("Material type {:?}", material.keys().next().unwrap());
+    
+    println!("*************************************************");
+    // *****************************************************
+    // match case on material
+    let type_material = material.keys().next().unwrap();
 
-    if material.keys().next().unwrap() == &Material::numeric {
-    println!("Numeric = {:?}", material.get(&Material::numeric).unwrap());
-    return Leaf::Numeric(material.get(&Material::numeric).unwrap().to_string());
-    } else  if material.keys().next().unwrap() == &Material::variable {
-        println!("Variable key = {:?}", material.get(&Material::variable).unwrap());
-        return Leaf::Variable(material.get(&Material::variable).unwrap().to_string());
-        }
-    else {
-        println!("no leaf");
-        return Leaf::NoLeaf
+    match type_material {
+        &Material::numeric => println!(".........build right leaf"), //Leaf::Numeric(material.get(&Material::numeric).unwrap().to_string()),
+        &Material::variable => println!("build left leaf .........."), //Leaf::Variable(material.get(&Material::variable).unwrap().to_string()),
+        &Material::operation => println!("......build Node.........")
+    };
+
+
+    // if material.keys().next().unwrap() == &Material::numeric {
+    // println!("Numeric = {:?}", material.get(&Material::numeric).unwrap());
+    // return Leaf::Numeric(material.get(&Material::numeric).unwrap().to_string());
+    // } else  if material.keys().next().unwrap() == &Material::variable {
+    //     println!("Variable key = {:?}", material.get(&Material::variable).unwrap());
+    //     return Leaf::Variable(material.get(&Material::variable).unwrap().to_string());
+    //     }
+    // else {
+    //     println!("no leaf");
+    //     return Leaf::NoLeaf
     }
-}
+
 
 // fn node_builder(material: HashMap<Material, String>)-> Node {
 //     
@@ -130,9 +97,9 @@ fn build_AST_by_hand() {
     //  / \
     // x   3
 
-let left_node = Box::new(Some(Leaf::Variable("x".to_string())));
-let right_node = Box::new(Some(Leaf::Numeric("3".to_string())));
-let node = Node {operation: "+".to_string(),left: left_node, right: right_node };
+let left_node = Box::new(Some(Leaf::Variable("x")));
+let right_node = Box::new(Some(Leaf::Numeric("3")));
+let node = Node {operation: "+", left: left_node, right: right_node };
 println!("node {:?}", node)
 
 }
