@@ -1,5 +1,4 @@
-#![warn(unused_variables)]
-#![warn(non_snake_case)]
+#![allow(warnings)]
 mod helper_functions;
 use crate::helper_functions::*;
 mod structures;
@@ -8,12 +7,9 @@ use crate::structures::all_structures::*;
 use std::collections::HashMap;
 
 
-fn enginneer(lexer_string: &Vec<&str>) -> () {
+fn engineer(lexer_string: &Vec<&str>) -> () {
 
-    let mut vec_operations:Vec<&str> = vec!["x","/","+","-"];
-    vec_operations.sort();
-    let vec_operations = vec_operations;
-
+    
 
     if lexer_string.len() > 2 {
         println!("ENGINEER STARTS");// testing code execution
@@ -22,9 +18,10 @@ fn enginneer(lexer_string: &Vec<&str>) -> () {
          // send two last token to node_leaf_builder
          // helper function : create HashMap <material, &Str>
          let hm = create_hashmap_to_builder(&lexer_string[lexer_string.len() - 2 ..]);
+
          node_leaf_builder(&hm);
         
-        enginneer(&helper_functions::take_all_but_last(&lexer_string));
+        engineer(&helper_functions::take_all_but_last(&lexer_string));
         } else {
 
         println!("ENGINEER EXITS");// testing code execution
@@ -49,31 +46,25 @@ fn node_leaf_builder(material: &HashMap<Material, &str>)-> () { //leaf<'a>
     
     println!("*************************************************");
     // *****************************************************
-    // match case on material
-    let type_material = material.keys().next().unwrap();
+    // match case on 
+    for (type_material, value) in material.iter() {
+    //let t_material = material.keys().next().unwrap();
 
     match type_material {
-        &Material::numeric => println!(".........build right leaf"), //Leaf::Numeric(material.get(&Material::numeric).unwrap().to_string()),
+        &Material::numeric => println!(".........build Numeric right leaf"), //Leaf::Numeric(material.get(&Material::numeric).unwrap().to_string()),
         &Material::variable => println!("build left leaf .........."), //Leaf::Variable(material.get(&Material::variable).unwrap().to_string()),
-        &Material::operation => println!("......build Node.........")
+        &Material::operation => println!("......build Operation Node.........")
     };
+    }
 
-
-    // if material.keys().next().unwrap() == &Material::numeric {
-    // println!("Numeric = {:?}", material.get(&Material::numeric).unwrap());
-    // return Leaf::Numeric(material.get(&Material::numeric).unwrap().to_string());
-    // } else  if material.keys().next().unwrap() == &Material::variable {
-    //     println!("Variable key = {:?}", material.get(&Material::variable).unwrap());
-    //     return Leaf::Variable(material.get(&Material::variable).unwrap().to_string());
-    //     }
-    // else {
-    //     println!("no leaf");
-    //     return Leaf::NoLeaf
+    
     }
 
 
-// fn node_builder(material: HashMap<Material, String>)-> Node {
-//     
+fn node_builder(material: HashMap<Material, String>)-> () {
+        
+        
+        todo!();
 
 //     
 //     TODO : node builder code
@@ -81,7 +72,7 @@ fn node_leaf_builder(material: &HashMap<Material, &str>)-> () { //leaf<'a>
 //     
     
 // 
-// }
+}
 
 
 fn main() {
@@ -111,6 +102,6 @@ fn test_leaf_builder () {
     let mut test_string =  vec!["4","/","18","x","2"];
     println!("START TEST vec LENGTH:------ {} --------", test_string.len());
     //test_materials.insert(Material::operation, "plus".to_string());
-    enginneer(&test_string);
+    engineer(&test_string);
    
 }

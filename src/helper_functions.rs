@@ -3,6 +3,8 @@ pub use crate::structures::all_structures;
 
 use std::collections::HashMap;
 
+const OPERATIONS: [&str;4] = ["x","/","+","-"];
+
 pub fn remove_whitespace(s: String) -> String {
     let mut new_s = String::new();
     for c in s.chars() {
@@ -46,12 +48,49 @@ fn split_vector_by_slicing(vector: Vec<i32>, mut collect: &mut Vec<Vec<i32>>) ->
 pub fn take_all_but_last<T: std::clone::Clone>(vec: &Vec<T>) -> Vec<T> {
         vec[..vec.len() - 2].to_vec()
     }
+
+
 // receive two strings and create a HashMap for the engineer
-pub fn create_hashmap_to_builder<'a>(vec: &'a [&'a str]) -> HashMap<all_structures::Material, &'a str> {
+
+fn identify_components(component: &str) -> (all_structures::Material, &str) {
+    let op = ["x","/","+","-"];
+
+    if op.iter().any(|&i| i == component) {
+        (all_structures::Material::operation, component)
+    } else {
+        (all_structures::Material::numeric, "atom")
+    }
+
+
+}
+
+
+pub fn create_hashmap_to_builder<'a>(vec_tokens: &'a [&'a str]) -> HashMap<all_structures::Material, &'a str> {
+
+    println!("ENTER HASHMAP to BUILDER vec_token: {:?}", vec_tokens);
 
     let mut parsed_materials_first_node: HashMap<all_structures::Material, &str> = HashMap::new();
-    let opr_first_node:all_structures::Material = all_structures::Material::operation;
-    parsed_materials_first_node.insert(opr_first_node, "3");
+    
+   //map over the vec and create a hasmap
+    for vec_token in vec_tokens {
+
+        parsed_materials_first_node.insert(identify_components(vec_token).0, identify_components(vec_token).1);
+    }
+    
+    //let opr_first_node:all_structures::Material = all_structures::Material::operation;
+
+        // if material.keys().next().unwrap() == &Material::numeric {
+        // println!("Numeric = {:?}", material.get(&Material::numeric).unwrap());
+        // return Leaf::Numeric(material.get(&Material::numeric).unwrap().to_string());
+        // } else  if material.keys().next().unwrap() == &Material::variable {
+        //     println!("Variable key = {:?}", material.get(&Material::variable).unwrap());
+        //     return Leaf::Variable(material.get(&Material::variable).unwrap().to_string());
+        //     }
+        // else {
+        //     println!("no leaf");
+        //     return Leaf::NoLeaf
+
+    //parsed_materials_first_node.insert(opr_first_node, "3");
     return parsed_materials_first_node; 
 
 }
